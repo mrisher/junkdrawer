@@ -18,21 +18,24 @@ export default class TodoDataService extends Service {
     return this.todos;
   }
 
+  get completed() {
+    return this.todos.filter((todo) => todo.isCompleted);
+  }  
+
   get incomplete() {
     return this.todos.filter((todo) => todo.isCompleted == false);
   }
-  
+
   get todoCountIsOne() {
     return this.incomplete.length === 1;
   }
-  
 
   @action
   add(text) {
     let newTodo = new Todo(text);
 
     this.todos.push(newTodo);
-    this.todos = this.todos;    // self-assignment to trigger Tracked
+    this.todos = this.todos; // self-assignment to trigger Tracked
   }
 
   @action
@@ -40,4 +43,8 @@ export default class TodoDataService extends Service {
     this.todos = this.incomplete;
   }
 
+  @action
+  toggleCompletion(todo) {
+    todo.isCompleted = !todo.isCompleted;
+  }
 }
