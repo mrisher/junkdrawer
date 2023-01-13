@@ -1,7 +1,6 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { A } from '@ember/array';
 
 class Todo {
   @tracked text = '';
@@ -13,14 +12,18 @@ class Todo {
 }
 
 export default class TodoDataService extends Service {
-  @tracked todos = A();
+  @tracked todos = [];
 
   get all() {
     return this.todos;
   }
 
   get incomplete() {
-    return this.todos.filterBy('isCompleted', false);
+    return this.todos.filter((todo) => todo.isCompleted == false);
+  }
+  
+  get todoCountIsOne() {
+    return this.incomplete.length === 1;
   }
   
 
@@ -28,7 +31,8 @@ export default class TodoDataService extends Service {
   add(text) {
     let newTodo = new Todo(text);
 
-    this.todos.pushObject(newTodo);
+    this.todos.push(newTodo);
+    this.todos = this.todos;    // self-assignment to trigger Tracked
   }
 
   @action
