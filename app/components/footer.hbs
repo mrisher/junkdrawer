@@ -1,0 +1,13 @@
+<footer class="footer">
+  <span class="todo-count"> <strong>{{this.todos.incomplete.length}}</strong> todos left </span>
+
+  <ul class="filters">
+    <li>
+      <a href="#">All</a>
+      <a href="#">Active</a>
+      <a href="#">Completed</a>
+    </li>
+  </ul>
+
+  <button type="button" class="clear-completed" {{on 'click' this.todos.clearCompleted}}>Clear Completed</button>
+</footer>
