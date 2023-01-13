@@ -38,6 +38,12 @@ export default class TodoDataService extends Service {
     this.todos = this.todos; // self-assignment to trigger Tracked
   }
 
+  @action remove(todo) {
+    this.todos = this.todos.filter(existing => {
+      return existing !== todo;
+    });
+  }
+
   @action
   clearCompleted() {
     this.todos = this.incomplete;
@@ -46,5 +52,14 @@ export default class TodoDataService extends Service {
   @action
   toggleCompletion(todo) {
     todo.isCompleted = !todo.isCompleted;
+  }
+
+  @action updateTitle(todo, title) {
+    todo.text = title;
+    this.persist();
+  }
+
+  @action persist() {
+    //persist(this.data);
   }
 }

@@ -1,15 +1,33 @@
-<li class="{{ if @todo.isCompleted 'completed' }}">
-  <div class="view">
+<li class='
+  {{if @todo.isCompleted "completed"}}
+  {{if this.isEditing "editing"}}
+'>
+  <div class='view'>
     <input
-      aria-label="Toggle the completion of this todo"
-      class="toggle"
-      type="checkbox" 
-      checked={{ @todo.isCompleted }}
-      {{ on 'change' (fn this.todos.toggleCompletion @todo) }}
-    />
-    <label>{{@todo.text}}</label>
-    <button type="button" class="destroy" title="Remove this todo"></button>
+      aria-label='Toggle the completion of this todo'
+      class='toggle'
+      type='checkbox'
+      checked={{@todo.isCompleted }}
+      {{on 'change' this.complete}}
+    >
+    <label {{on 'dblclick' this.edit}}>
+      {{@todo.text}}
+    </label>
+
+    <button
+      type='button'
+      class='destroy'
+      title='Remove this todo'
+      {{on 'click' (fn this.todos.remove @todo)}}
+    ></button>
   </div>
 
-  <input autofocus class="edit" value="Todo Text" />
+  <input
+    autofocus
+    class='edit'
+    value={{@todo.text}}
+    {{did-insert this.createRef}}
+    {{on 'blur' this.finish}}
+    {{on 'keydown' this.onKeyDown}}
+  >
 </li>
