@@ -21,7 +21,7 @@ module.exports = function (environment) {
     },
   };
 
-  ENV.FIREBASE_API_KEY = process.env.FIREBASE_API_KEY;
+  ENV.FIREBASE_API_KEY = process.env.MY_FIREBASE_API_KEY;
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
