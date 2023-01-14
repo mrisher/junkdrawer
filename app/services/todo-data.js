@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { initializeApp} from 'firebase/app';
 import { getDatabase, ref, set, get, onValue } from "firebase/database";
+import ENV from 'ember-todomvc/config/environment';
 
 class Todo {
   @tracked text = '';
@@ -18,7 +19,7 @@ class Todo {
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyDQ1oCUEnV4lgx9R6_d_2RL_Zal6Kab54g",
+    apiKey: ENV.FIREBASE_API_KEY,
     authDomain: "junkdrawer-372716.firebaseapp.com",
     databaseURL: "https://junkdrawer-372716-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "junkdrawer-372716",

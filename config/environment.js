@@ -6,6 +6,7 @@ module.exports = function (environment) {
     environment,
     rootURL: '/',
     locationType: 'history',
+    FIREBASE_API_KEY: null,
     EmberENV: {
       EXTEND_PROTOTYPES: false,
       FEATURES: {
@@ -19,6 +20,8 @@ module.exports = function (environment) {
       // when it is created
     },
   };
+
+  ENV.FIREBASE_API_KEY = process.env.FIREBASE_API_KEY;
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
