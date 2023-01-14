@@ -34,6 +34,8 @@ const firebaseConfig = {
   // Initialize Realtime Database and get a reference to the service
   const database = getDatabase(app);
 
+  const DATABASE_PARTITION = "todos";
+
   // example of writing to db
   //set(ref(database, "test/t1"), {id: 1, data: 222});
   
@@ -52,7 +54,7 @@ export default class TodoDataService extends Service {
   constructor(...args) {
     super(...args);
     
-    onValue(ref(database, "test/todos"), (snapshot) => {
+    onValue(ref(database, DATABASE_PARTITION), (snapshot) => {
         load(this, deserializeTodoData(JSON.parse(snapshot.val())));
     }, {
         onlyOnce: true
@@ -128,7 +130,7 @@ export default class TodoDataService extends Service {
     //localStorage.setItem('todos', result);
     
     // write to firestore
-    set(ref(database, "test/todos"), result);
+    set(ref(database, DATABASE_PARTITION), result);
   
     return result;
   }
