@@ -10,6 +10,7 @@
 
 # misc
 /.env*
+/functions/.env*
 /.pnp*
 /.sass-cache
 /.eslintcache
