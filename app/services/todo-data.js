@@ -2,7 +2,7 @@ import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { initializeApp} from 'firebase/app';
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, get, onValue } from "firebase/database";
 
 class Todo {
   @tracked text = '';
@@ -35,7 +35,7 @@ const firebaseConfig = {
   const database = getDatabase(app);
 
   // example of writing to db
-  // set(ref(database, "test/t1"), {id: 1, data: 222});
+  //set(ref(database, "test/t1"), {id: 1, data: 222});
   
   // var admin = require("firebase-admin");
   
@@ -48,6 +48,17 @@ const firebaseConfig = {
 
 export default class TodoDataService extends Service {
   @tracked todos = [];
+
+  constructor(...args) {
+    super(...args);
+    
+    onValue(ref(database, "test/todos"), (snapshot) => {
+        load(this, deserializeTodoData(JSON.parse(snapshot.val())));
+    }, {
+        onlyOnce: true
+    });
+
+  }
 
   get all() {
     return this.todos;
@@ -71,22 +82,26 @@ export default class TodoDataService extends Service {
 
     this.todos.push(newTodo);
     this.todos = this.todos; // self-assignment to trigger Tracked
+    this.persist();
   }
 
   @action remove(todo) {
     this.todos = this.todos.filter(existing => {
       return existing !== todo;
+      this.persist();
     });
   }
 
   @action
   clearCompleted() {
     this.todos = this.incomplete;
+    this.persist();
   }
 
   @action
   toggleCompletion(todo) {
     todo.isCompleted = !todo.isCompleted;
+    this.persist();
   }
 
   @action updateTitle(todo, title) {
@@ -95,6 +110,39 @@ export default class TodoDataService extends Service {
   }
 
   @action persist() {
-    //persist(this.data);
+    persist(this.todos);
   }
 }
+
+/**************************
+ * local storage helpers
+ ***************************/
+  function load(pTodoListComponent, parsedInput) {
+    // needs a pointer to the container class so it can set the child "todos" element
+    pTodoListComponent.todos = (parsedInput || []);
+  }
+
+  function persist(todos) {
+    let data = serializeTodos(todos);
+    let result = JSON.stringify(data);
+    //localStorage.setItem('todos', result);
+    
+    // write to firestore
+    set(ref(database, "test/todos"), result);
+  
+    return result;
+  }
+  
+  function serializeTodos(todos) {
+    return todos.map(todo => ({ title: todo.text, completed: todo.isCompleted }));
+  }
+  
+  function deserializeTodoData(data) {
+    return (data || []).map(json => {
+      let todo = new Todo(json.title);
+  
+      todo.isCompleted = json.completed;
+  
+      return todo;
+    });
+  }
