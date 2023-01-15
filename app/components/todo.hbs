@@ -10,19 +10,21 @@
       checked={{@todo.isCompleted }}
       {{on 'change' this.complete}}
     >
-    <EmberTooltip><iconify-icon icon="mdi:movie"></iconify-icon></EmberTooltip>
+    {{!-- <EmberTooltip>
+        <iconify-icon icon="mdi:movie"></iconify-icon>
+        <iconify-icon icon="material-symbols:tv-outline"></iconify-icon>
+        <iconify-icon icon="material-symbols:menu-book-outline-sharp"></iconify-icon>
+        <iconify-icon icon="ic:baseline-place"></iconify-icon>
+    </EmberTooltip> --}}
     <label {{on 'dblclick' this.edit}}>
       {{@todo.text}}
     </label>
 
-    <button
-        type="button"
-        class="movie"
-        title="type"
-    >
-    <iconify-icon icon="material-symbols:tv-outline"></iconify-icon>
-    <iconify-icon icon="material-symbols:menu-book-outline-sharp"></iconify-icon>
-    <iconify-icon icon="ic:baseline-place"></iconify-icon></button>
+    <span class="type" title="Type">
+        <iconify-icon icon="{{@todo.itemType.icon}}" style="{{@todo.itemType.style}}"></iconify-icon>
+        <EmberTooltip>{{@todo.itemType.name}}</EmberTooltip>
+    </span>
+
     <button
       type='button'
       class='destroy'

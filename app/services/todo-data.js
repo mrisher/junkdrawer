@@ -5,12 +5,32 @@ import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, get, onValue } from 'firebase/database';
 import ENV from 'ember-todomvc/config/environment';
 
+
+class ItemType {
+    static Unknown = new ItemType("unknown", "mdi:question-mark-rhombus-outline", "color: #af5b5e;");
+	static Movie = new ItemType("movie", "mdi:movie");
+    static Book = new ItemType("book", "material-symbols:menu-book-outline-sharp");
+    static Show = new ItemType("show", "material-symbols:tv-outline");
+    static Place = new ItemType("place", "ic:baseline-place");
+
+    constructor(name, icon, style) {
+        this.name = name;
+        this.icon = icon;
+        this.style = style;
+    }
+}
+
 class Todo {
   @tracked text = '';
   @tracked isCompleted = false;
+  @tracked itemType = ItemType.Movie;
 
   constructor(text) {
     this.text = text;
+  }
+
+  typeEqual(type) {
+    return (type === this.itemType);
   }
 }
 

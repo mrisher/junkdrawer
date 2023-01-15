@@ -71,7 +71,7 @@ body {
 	position: absolute;
 	top: -155px;
 	width: 100%;
-	font-size: 70px;
+	font-size: 400%;
 	font-weight: 100;
 	text-align: center;
 	color: rgba(175, 47, 47, 0.15);
@@ -211,6 +211,7 @@ body {
 	display: block;
 	line-height: 1.2;
 	transition: color 0.4s;
+  width: 75%;
 }
 
 .todo-list li.completed label {
@@ -238,7 +239,8 @@ body {
 }
 
 .todo-list li .destroy:after {
-	content: '×';
+	/* content: '×'; */
+  content: url('https://api.iconify.design/ph/trash.svg?color=%23af5b5e');
 }
 
 .todo-list li:hover .destroy {
@@ -251,6 +253,20 @@ body {
 
 .todo-list li.editing:last-child {
 	margin-bottom: -1px;
+}
+
+.todo-list li .type {
+  display:block;
+	position: absolute;
+	top: 10px;
+	right: 40px;
+	bottom: 0;
+	width: 40px;
+	height: 40px;
+	margin: auto 0;
+	font-size: 30px;
+	color: #a69acc;
+	margin-bottom: 5px;
 }
 
 .footer {
