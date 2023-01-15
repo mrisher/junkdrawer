@@ -10,6 +10,7 @@
       checked={{@todo.isCompleted }}
       {{on 'change' this.complete}}
     >
+    <EmberTooltip><iconify-icon icon="mdi:movie"></iconify-icon></EmberTooltip>
     <label {{on 'dblclick' this.edit}}>
       {{@todo.text}}
     </label>
@@ -18,7 +19,10 @@
         type="button"
         class="movie"
         title="type"
-    >X</button>
+    >
+    <iconify-icon icon="material-symbols:tv-outline"></iconify-icon>
+    <iconify-icon icon="material-symbols:menu-book-outline-sharp"></iconify-icon>
+    <iconify-icon icon="ic:baseline-place"></iconify-icon></button>
     <button
       type='button'
       class='destroy'
