@@ -21,12 +21,15 @@
     </label>
 
     <span class="type" title="Type">
-        <select class="type">
-            <option class="iconify" data-icon="mdi:question-mark-rhombus-outline">1</option>
-            <option>2</option>
-        </select>
         <iconify-icon icon="{{@todo.itemType.icon}}" style="{{@todo.itemType.style}}"></iconify-icon>
-        <EmberTooltip>{{@todo.itemType.name}}</EmberTooltip>
+        <EmberPopover> 
+            <select class="item-type">
+                <option>{{@todo.itemType.name}}</option>
+                <option>Movie</option>
+                <option>Show</option>
+                <option>Book</option>
+                <option>Place</option>
+        </select></EmberPopover>
     </span>
 
     <button
