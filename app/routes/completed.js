@@ -10,7 +10,7 @@ export default class CompletedRoute extends Route {
     return {
       get completedTodos() {
         return todos.completed;
-      }
-    }
+      },
+    };
   }
 }

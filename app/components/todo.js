@@ -58,5 +58,4 @@ export default class TodoComponent extends Component {
 
     this.inputElement.focus();
   }
-
 }

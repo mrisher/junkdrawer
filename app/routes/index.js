@@ -10,7 +10,7 @@ export default class IndexRoute extends Route {
     return {
       get allTodos() {
         return todos.all;
-      }
-    }
+      },
+    };
   }
 }

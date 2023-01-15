@@ -7,6 +7,8 @@ module.exports = function (defaults) {
 
   //app.import('node_modules/todomvc-common/base.css');
   //app.import('node_modules/todomvc-app-css/index.css');
+  // app.import('node_modules/material-icons/iconfont/material-icons.css');
+  // app.import('node_modules/material-icons/iconfont/material-icons.woff2');
 
   // Use `app.import` to add additional libraries to the generated
   // output files.

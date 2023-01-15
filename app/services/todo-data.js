@@ -1,8 +1,8 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { initializeApp} from 'firebase/app';
-import { getDatabase, ref, set, get, onValue } from "firebase/database";
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, set, get, onValue } from 'firebase/database';
 import ENV from 'ember-todomvc/config/environment';
 
 class Todo {
@@ -14,53 +14,56 @@ class Todo {
   }
 }
 
-
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: ENV.FIREBASE_API_KEY,
-    authDomain: "junkdrawer-372716.firebaseapp.com",
-    databaseURL: "https://junkdrawer-372716-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "junkdrawer-372716",
-    storageBucket: "junkdrawer-372716.appspot.com",
-    messagingSenderId: "1030245305217",
-    appId: "1:1030245305217:web:6da7435ddb20a060b2f680",
-    measurementId: "G-4WCWY2BS1P"
-  };
+  apiKey: ENV.FIREBASE_API_KEY,
+  authDomain: 'junkdrawer-372716.firebaseapp.com',
+  databaseURL:
+    'https://junkdrawer-372716-default-rtdb.europe-west1.firebasedatabase.app',
+  projectId: 'junkdrawer-372716',
+  storageBucket: 'junkdrawer-372716.appspot.com',
+  messagingSenderId: '1030245305217',
+  appId: '1:1030245305217:web:6da7435ddb20a060b2f680',
+  measurementId: 'G-4WCWY2BS1P',
+};
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-  // Initialize Realtime Database and get a reference to the service
-  const database = getDatabase(app);
+// Initialize Realtime Database and get a reference to the service
+const database = getDatabase(app);
 
-  const DATABASE_PARTITION = "todos";
+const DATABASE_PARTITION = 'todos';
 
-  // example of writing to db
-  //set(ref(database, "test/t1"), {id: 1, data: 222});
-  
-  // var admin = require("firebase-admin");
-  
-  // var serviceAccount = require("path/to/serviceAccountKey.json");
-  
-  // admin.initializeApp({
-  //   credential: admin.credential.cert(serviceAccount),
-  //   databaseURL: "https://junkdrawer-372716-default-rtdb.europe-west1.firebasedatabase.app"
-  // });  
+// example of writing to db
+//set(ref(database, "test/t1"), {id: 1, data: 222});
+
+// var admin = require("firebase-admin");
+
+// var serviceAccount = require("path/to/serviceAccountKey.json");
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://junkdrawer-372716-default-rtdb.europe-west1.firebasedatabase.app"
+// });
 
 export default class TodoDataService extends Service {
   @tracked todos = [];
 
   constructor(...args) {
     super(...args);
-    
-    onValue(ref(database, DATABASE_PARTITION), (snapshot) => {
-        load(this, deserializeTodoData(JSON.parse(snapshot.val())));
-    }, {
-        onlyOnce: true
-    });
 
+    onValue(
+      ref(database, DATABASE_PARTITION),
+      (snapshot) => {
+        load(this, deserializeTodoData(JSON.parse(snapshot.val())));
+      },
+      {
+        onlyOnce: true,
+      }
+    );
   }
 
   get all() {
@@ -69,7 +72,7 @@ export default class TodoDataService extends Service {
 
   get completed() {
     return this.todos.filter((todo) => todo.isCompleted);
-  }  
+  }
 
   get incomplete() {
     return this.todos.filter((todo) => todo.isCompleted == false);
@@ -89,7 +92,7 @@ export default class TodoDataService extends Service {
   }
 
   @action remove(todo) {
-    this.todos = this.todos.filter(existing => {
+    this.todos = this.todos.filter((existing) => {
       return existing !== todo;
       this.persist();
     });
@@ -120,32 +123,35 @@ export default class TodoDataService extends Service {
 /**************************
  * local storage helpers
  ***************************/
-  function load(pTodoListComponent, parsedInput) {
-    // needs a pointer to the container class so it can set the child "todos" element
-    pTodoListComponent.todos = (parsedInput || []);
-  }
+function load(pTodoListComponent, parsedInput) {
+  // needs a pointer to the container class so it can set the child "todos" element
+  pTodoListComponent.todos = parsedInput || [];
+}
 
-  function persist(todos) {
-    let data = serializeTodos(todos);
-    let result = JSON.stringify(data);
-    //localStorage.setItem('todos', result);
-    
-    // write to firestore
-    set(ref(database, DATABASE_PARTITION), result);
-  
-    return result;
-  }
-  
-  function serializeTodos(todos) {
-    return todos.map(todo => ({ title: todo.text, completed: todo.isCompleted }));
-  }
-  
-  function deserializeTodoData(data) {
-    return (data || []).map(json => {
-      let todo = new Todo(json.title);
-  
-      todo.isCompleted = json.completed;
-  
-      return todo;
-    });
-  }
+function persist(todos) {
+  let data = serializeTodos(todos);
+  let result = JSON.stringify(data);
+  //localStorage.setItem('todos', result);
+
+  // write to firestore
+  set(ref(database, DATABASE_PARTITION), result);
+
+  return result;
+}
+
+function serializeTodos(todos) {
+  return todos.map((todo) => ({
+    title: todo.text,
+    completed: todo.isCompleted,
+  }));
+}
+
+function deserializeTodoData(data) {
+  return (data || []).map((json) => {
+    let todo = new Todo(json.title);
+
+    todo.isCompleted = json.completed;
+
+    return todo;
+  });
+}

@@ -10,7 +10,7 @@ export default class ActiveRoute extends Route {
     return {
       get activeTodos() {
         return todos.incomplete;
-      }
-    }
+      },
+    };
   }
 }
