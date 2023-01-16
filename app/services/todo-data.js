@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, get, onValue } from 'firebase/database';
+import { getAuth, getRedirectResult, signInWithRedirect, onAuthStateChanged, GoogleAuthProvider } from 'firebase/auth';
 import ENV from 'ember-todomvc/config/environment';
 
 
@@ -40,7 +41,7 @@ class Todo {
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: ENV.FIREBASE_API_KEY,
-  authDomain: 'junkdrawer-372716.firebaseapp.com',
+  authDomain: 'junkdrawer-372716.web.app',
   databaseURL:
     'https://junkdrawer-372716-default-rtdb.europe-west1.firebasedatabase.app',
   projectId: 'junkdrawer-372716',
@@ -53,10 +54,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Realtime Database and get a reference to the service
+// Do Authentication (if necessary)
+const auth = getAuth();
+const provider = new GoogleAuthProvider();
 const database = getDatabase(app);
-
-const DATABASE_PARTITION = ENV.FIREBASE_DATABASE_PARTITION; //'todos';
 
 // example of writing to db
 //set(ref(database, "test/t1"), {id: 1, data: 222});
@@ -72,19 +73,33 @@ const DATABASE_PARTITION = ENV.FIREBASE_DATABASE_PARTITION; //'todos';
 
 export default class TodoDataService extends Service {
   @tracked todos = [];
+  DatabasePartition = "";
 
   constructor(...args) {
     super(...args);
 
-    onValue(
-      ref(database, DATABASE_PARTITION),
-      (snapshot) => {
-        load(this, deserializeTodoData(JSON.parse(snapshot.val())));
-      },
-      {
-        onlyOnce: true,
-      }
-    );
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          // alert("User " + user.displayName + " signed in");
+        // Initialize Realtime Database and get a reference to the service
+        this.DatabasePartition = ENV.FIREBASE_DATABASE_PARTITION.replace('$USERID', auth.currentUser.uid);
+        onValue(
+            ref(database, this.DatabasePartition),
+            (snapshot) => {
+              load(this, deserializeTodoData(JSON.parse(snapshot.val())));
+            },
+            {
+              onlyOnce: true,
+            }
+          );
+        } else {
+          // User is signed out
+          // ...
+          signInWithRedirect(auth, provider);
+        }
+      });
   }
 
   get all() {
@@ -146,7 +161,7 @@ export default class TodoDataService extends Service {
   }
 
   @action persist() {
-    persist(this.todos);
+    persist(this.todos, this.DatabasePartition);
   }
 
   
@@ -160,12 +175,12 @@ function load(pTodoListComponent, parsedInput) {
   pTodoListComponent.todos = parsedInput || [];
 }
 
-function persist(todos) {
+function persist(todos, partition) {
   let data = serializeTodos(todos);
   let result = JSON.stringify(data);
 
   // write to firestore
-  set(ref(database, DATABASE_PARTITION), result);
+  set(ref(database, partition), result);
 
   return result;
 }
