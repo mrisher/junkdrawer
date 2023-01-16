@@ -20,8 +20,23 @@
       {{@todo.text}}
     </label>
 
-    <ItemType @todo={{@todo}}></ItemType>
+    {{!-- <ItemType @value={{@todo.itemType.name}} @onSelect={{this.handleSelectItemType}} as |sb|>
+        {{#each this.allTypes as |type|}}
+            <sb.Option @value={{type}}>{{type}}</sb.Option>
+        {{/each}}
+    </ItemType> --}}
 
+    <NativeSelectBox class="item-type"
+        @value={{@todo.itemType.name}}
+        @onSelect={{this.setType}}
+        as |sb|>
+        {{#each this.todos.allTodoTypes as |type|}}
+            <sb.Option @value={{type}}>
+                {{type}}
+            </sb.Option>
+        {{/each}}
+    </NativeSelectBox>
+    
     <button
       type='button'
       class='destroy'

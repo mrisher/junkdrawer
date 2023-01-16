@@ -24,6 +24,11 @@ export default class TodoComponent extends Component {
     this.todos.toggleCompletion(todo);
   }
 
+  @action setType(typeName) {
+    let { todo } = this.args;
+    this.todos.setType(todo, typeName);
+  }
+
   @action finish() {
     if (!this.isEditing) return;
 

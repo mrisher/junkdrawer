@@ -1,14 +1,21 @@
 <span class="type" title="Type">
-    <iconify-icon icon="{{this.itemType.icon}}" style="{{this.itemType.style}}"></iconify-icon>
-    <EmberPopover> 
+    {{!-- <iconify-icon icon="{{this.itemType.icon}}" style="{{this.itemType.style}}"></iconify-icon> --}}
+
+    <SelectBox class='foo' @value={{@value}} @onSelect={{@onSelect}} as |sb|>
+    <sb.SelectedOption {{on 'click' sb.toggle}}>
+        {{sb.value.name}}
+    </sb.SelectedOption>
+    <sb.Options>
+        {{yield sb}}
+    </sb.Options>
+    </SelectBox>
+
+    {{!-- <EmberPopover> 
         <select class="item-type">
             <option>{{this.itemType.name}}</option>
             {{#each this.allTypes as |type|}}
                 <option>{{type}}</option>
             {{/each}}
-            <option>Movie</option>
-            <option>Show</option>
-            <option>Book</option>
-            <option>Place</option>
-    </select></EmberPopover>
+        </select>
+    </EmberPopover> --}}
 </span>

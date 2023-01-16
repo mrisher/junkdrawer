@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { setComponentTemplate } from '@ember/component';
 
 export default class ItemTypeComponent extends Component {
 

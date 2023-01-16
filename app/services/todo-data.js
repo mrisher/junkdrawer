@@ -103,6 +103,10 @@ export default class TodoDataService extends Service {
     return this.incomplete.length === 1;
   }
 
+  get allTodoTypes() {
+    return Object.keys(TodoType);
+  }
+
   @action
   add(text) {
     let newTodo = new Todo(text);
@@ -138,6 +142,10 @@ export default class TodoDataService extends Service {
 
   @action persist() {
     persist(this.todos);
+  }
+
+  @action setType(todo, typeName) {
+    todo.itemType = TodoType[typeName];
   }
 }
 
