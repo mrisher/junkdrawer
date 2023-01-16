@@ -20,17 +20,7 @@
       {{@todo.text}}
     </label>
 
-    <span class="type" title="Type">
-        <iconify-icon icon="{{@todo.itemType.icon}}" style="{{@todo.itemType.style}}"></iconify-icon>
-        <EmberPopover> 
-            <select class="item-type">
-                <option>{{@todo.itemType.name}}</option>
-                <option>Movie</option>
-                <option>Show</option>
-                <option>Book</option>
-                <option>Place</option>
-        </select></EmberPopover>
-    </span>
+    <ItemType @todo={{@todo}}></ItemType>
 
     <button
       type='button'
