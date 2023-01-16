@@ -56,7 +56,7 @@ const app = initializeApp(firebaseConfig);
 // Initialize Realtime Database and get a reference to the service
 const database = getDatabase(app);
 
-const DATABASE_PARTITION = 'todos';
+const DATABASE_PARTITION = ENV.FIREBASE_DATABASE_PARTITION; //'todos';
 
 // example of writing to db
 //set(ref(database, "test/t1"), {id: 1, data: 222});

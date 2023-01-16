@@ -29,6 +29,7 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.FIREBASE_DATABASE_PARTITION = "dev/todos";
   }
 
   if (environment === 'test') {
@@ -41,10 +42,12 @@ module.exports = function (environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+    ENV.FIREBASE_DATABASE_PARTITION = "test/todos";
   }
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
+    ENV.FIREBASE_DATABASE_PARTITION = "prod/todos";
   }
 
   return ENV;
