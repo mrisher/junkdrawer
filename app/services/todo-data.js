@@ -7,11 +7,11 @@ import ENV from 'ember-todomvc/config/environment';
 
 
 class TodoType {
-    static Unknown = new TodoType("unknown", "mdi:question-mark-rhombus-outline", "color: #af5b5e;");
-	static Movie = new TodoType("movie", "mdi:movie");
-    static Book = new TodoType("book", "material-symbols:menu-book-outline-sharp");
-    static Show = new TodoType("show", "material-symbols:tv-outline");
-    static Place = new TodoType("place", "ic:baseline-place");
+    static Unknown = new TodoType("Unknown", "mdi:question-mark-rhombus-outline", "color: #af5b5e;");
+	static Movie = new TodoType("Movie", "mdi:movie");
+    static Book = new TodoType("Book", "material-symbols:menu-book-outline-sharp");
+    static Show = new TodoType("Show", "material-symbols:tv-outline");
+    static Place = new TodoType("Place", "ic:baseline-place");
 
     constructor(name, icon, style) {
         this.name = name;
@@ -27,7 +27,7 @@ class Todo {
 
   constructor(text, type) {
     this.text = text;
-    this.itemType = type || TodoType.Unknown;
+    this.itemType = TodoType[type] || TodoType.Unknown;
   }
 
   typeEqual(type) {
@@ -140,13 +140,16 @@ export default class TodoDataService extends Service {
     this.persist();
   }
 
+  @action setType(todo, typeName) {
+    todo.itemType = TodoType[typeName];
+    this.persist();
+  }
+
   @action persist() {
     persist(this.todos);
   }
 
-  @action setType(todo, typeName) {
-    todo.itemType = TodoType[typeName];
-  }
+  
 }
 
 /**************************
@@ -160,7 +163,6 @@ function load(pTodoListComponent, parsedInput) {
 function persist(todos) {
   let data = serializeTodos(todos);
   let result = JSON.stringify(data);
-  //localStorage.setItem('todos', result);
 
   // write to firestore
   set(ref(database, DATABASE_PARTITION), result);
@@ -172,12 +174,13 @@ function serializeTodos(todos) {
   return todos.map((todo) => ({
     title: todo.text,
     completed: todo.isCompleted,
+    type: todo.itemType.name
   }));
 }
 
 function deserializeTodoData(data) {
   return (data || []).map((json) => {
-    let todo = new Todo(json.title);
+    let todo = new Todo(json.title, json.type);
 
     todo.isCompleted = json.completed;
 

@@ -1,7 +1,7 @@
 <span class="type" title="Type">
     {{!-- <iconify-icon icon="{{this.itemType.icon}}" style="{{this.itemType.style}}"></iconify-icon> --}}
 
-    <SelectBox class='foo' @value={{@value}} @onSelect={{@onSelect}} as |sb|>
+    <SelectBox class='item-type' @value={{@value}} @onSelect={{@onSelect}} as |sb|>
     <sb.SelectedOption {{on 'click' sb.toggle}}>
         {{sb.value.name}}
     </sb.SelectedOption>
