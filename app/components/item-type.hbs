@@ -2,7 +2,10 @@
     <iconify-icon icon="{{this.itemType.icon}}" style="{{this.itemType.style}}"></iconify-icon>
     <EmberPopover> 
         <select class="item-type">
-            <option>{{this.getName}}</option>
+            <option>{{this.itemType.name}}</option>
+            {{#each this.allTypes as |type|}}
+                <option>{{type}}</option>
+            {{/each}}
             <option>Movie</option>
             <option>Show</option>
             <option>Book</option>

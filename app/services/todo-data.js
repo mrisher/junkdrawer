@@ -27,7 +27,7 @@ class Todo {
 
   constructor(text, type) {
     this.text = text;
-    //this.itemType = type || TodoType.Unknown;
+    this.itemType = type || TodoType.Unknown;
   }
 
   typeEqual(type) {
