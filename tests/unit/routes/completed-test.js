@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupTest } from 'ember-todomvc/tests/helpers';
+import { setupTest } from 'junkdrawer/tests/helpers';
 
 module('Unit | Route | completed', function (hooks) {
   setupTest(hooks);

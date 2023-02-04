@@ -2,7 +2,7 @@
 
 module.exports = function (environment) {
   const ENV = {
-    modulePrefix: 'ember-todomvc',
+    modulePrefix: 'junkdrawer',
     environment,
     rootURL: '/',
     locationType: 'history',
@@ -29,7 +29,7 @@ module.exports = function (environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-    ENV.FIREBASE_DATABASE_PARTITION = "dev/$USERID/todos";
+    ENV.FIREBASE_DATABASE_PARTITION = 'dev/$USERID/todos';
   }
 
   if (environment === 'test') {
@@ -42,12 +42,12 @@ module.exports = function (environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
-    ENV.FIREBASE_DATABASE_PARTITION = "test/$USERID/todos";
+    ENV.FIREBASE_DATABASE_PARTITION = 'test/$USERID/todos';
   }
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
-    ENV.FIREBASE_DATABASE_PARTITION = "prod/$USERID/todos";
+    ENV.FIREBASE_DATABASE_PARTITION = 'prod/$USERID/todos';
   }
 
   return ENV;

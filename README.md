@@ -1,4 +1,4 @@
-# ember-todomvc
+# junkdrawer
 
 Tutorial from [MDN](https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/Ember_getting_started)
 
@@ -18,7 +18,7 @@ You will need the following things properly installed on your computer.
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd ember-todomvc`
+* `cd junkdrawer`
 * `npm install`
 
 ## Running / Development
