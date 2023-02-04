@@ -1,5 +1,5 @@
-import Application from 'ember-todomvc/app';
-import config from 'ember-todomvc/config/environment';
+import Application from 'junkdrawer/app';
+import config from 'junkdrawer/config/environment';
 import * as QUnit from 'qunit';
 import { setApplication } from '@ember/test-helpers';
 import { setup } from 'qunit-dom';

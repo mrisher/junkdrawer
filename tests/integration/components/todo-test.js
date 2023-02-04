@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-todomvc/tests/helpers';
+import { setupRenderingTest } from 'junkdrawer/tests/helpers';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
@@ -12,15 +12,6 @@ module('Integration | Component | todo', function (hooks) {
 
     await render(hbs`<Todo />`);
 
-    assert.dom(this.element).hasText('');
-
-    // Template block usage:
-    await render(hbs`
-      <Todo>
-        template block text
-      </Todo>
-    `);
-
-    assert.dom(this.element).hasText('template block text');
+    assert.dom(this.element).hasText('Unknown Movie Book Show Place');
   });
 });

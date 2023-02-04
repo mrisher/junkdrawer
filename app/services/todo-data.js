@@ -2,23 +2,36 @@ import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, set, get, onValue } from 'firebase/database';
-import { getAuth, getRedirectResult, signInWithRedirect, onAuthStateChanged, GoogleAuthProvider } from 'firebase/auth';
-import ENV from 'ember-todomvc/config/environment';
-
+import { getDatabase, connectDatabaseEmulator, ref, set, get, onValue } from 'firebase/database';
+import {
+  getAuth,
+  connectAuthEmulator,
+  getRedirectResult,
+  signInWithRedirect,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+} from 'firebase/auth';
+import ENV from 'junkdrawer/config/environment';
 
 class TodoType {
-    static Unknown = new TodoType("Unknown", "mdi:question-mark-rhombus-outline", "color: #af5b5e;");
-	static Movie = new TodoType("Movie", "mdi:movie");
-    static Book = new TodoType("Book", "material-symbols:menu-book-outline-sharp");
-    static Show = new TodoType("Show", "material-symbols:tv-outline");
-    static Place = new TodoType("Place", "ic:baseline-place");
+  static Unknown = new TodoType(
+    'Unknown',
+    'mdi:question-mark-rhombus-outline',
+    'color: #af5b5e;'
+  );
+  static Movie = new TodoType('Movie', 'mdi:movie');
+  static Book = new TodoType(
+    'Book',
+    'material-symbols:menu-book-outline-sharp'
+  );
+  static Show = new TodoType('Show', 'material-symbols:tv-outline');
+  static Place = new TodoType('Place', 'ic:baseline-place');
 
-    constructor(name, icon, style) {
-        this.name = name;
-        this.icon = icon;
-        this.style = style;
-    }
+  constructor(name, icon, style) {
+    this.name = name;
+    this.icon = icon;
+    this.style = style;
+  }
 }
 
 class Todo {
@@ -32,13 +45,15 @@ class Todo {
   }
 
   typeEqual(type) {
-    return (type === this.itemType);
+    return type === this.itemType;
   }
 }
 
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// TODO: Explore firebase functions for hiding secrets: https://www.youtube.com/watch?v=Pk5xgifoLYI 
+// (firebase:functions:config set)
 const firebaseConfig = {
   apiKey: ENV.FIREBASE_API_KEY,
   authDomain: 'junkdrawer-372716.web.app',
@@ -56,8 +71,15 @@ const app = initializeApp(firebaseConfig);
 
 // Do Authentication (if necessary)
 const auth = getAuth();
-const provider = new GoogleAuthProvider();
 const database = getDatabase(app);
+if (ENV.environment === 'development' || ENV.environment === 'test') {
+    connectAuthEmulator(auth, "http://localhost:9099");
+
+    // database testing functions https://firebase.google.com/docs/emulator-suite/connect_rtdb
+    // TODO: Clear database for tests
+    connectDatabaseEmulator(database, "localhost", 9000);
+}
+const provider = new GoogleAuthProvider();
 
 // example of writing to db
 //set(ref(database, "test/t1"), {id: 1, data: 222});
@@ -73,33 +95,36 @@ const database = getDatabase(app);
 
 export default class TodoDataService extends Service {
   @tracked todos = [];
-  DatabasePartition = "";
+  DatabasePartition = '';
 
   constructor(...args) {
     super(...args);
 
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-          // alert("User " + user.displayName + " signed in");
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        // alert("User " + user.displayName + " signed in");
         // Initialize Realtime Database and get a reference to the service
-        this.DatabasePartition = ENV.FIREBASE_DATABASE_PARTITION.replace('$USERID', auth.currentUser.uid);
+        this.DatabasePartition = ENV.FIREBASE_DATABASE_PARTITION.replace(
+          '$USERID',
+          auth.currentUser.uid
+        );
         onValue(
-            ref(database, this.DatabasePartition),
-            (snapshot) => {
-              load(this, deserializeTodoData(JSON.parse(snapshot.val())));
-            },
-            {
-              onlyOnce: true,
-            }
-          );
-        } else {
-          // User is signed out
-          // ...
-          signInWithRedirect(auth, provider);
-        }
-      });
+          ref(database, this.DatabasePartition),
+          (snapshot) => {
+            load(this, deserializeTodoData(JSON.parse(snapshot.val())));
+          },
+          {
+            onlyOnce: true,
+          }
+        );
+      } else {
+        // User is signed out
+        // ...
+        signInWithRedirect(auth, provider);
+      }
+    });
   }
 
   get all() {
@@ -163,8 +188,6 @@ export default class TodoDataService extends Service {
   @action persist() {
     persist(this.todos, this.DatabasePartition);
   }
-
-  
 }
 
 /**************************
@@ -189,7 +212,7 @@ function serializeTodos(todos) {
   return todos.map((todo) => ({
     title: todo.text,
     completed: todo.isCompleted,
-    type: todo.itemType.name
+    type: todo.itemType.name,
   }));
 }
 
