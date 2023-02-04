@@ -5,6 +5,10 @@
         ".read": "auth !== null && auth.uid == $user_id",
         ".write": "auth !== null && auth.uid == $user_id"
       }
+    },
+    "dev": {
+      ".read": "true",
+      ".write": "true"
     }
   }
 }
