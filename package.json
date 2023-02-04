@@ -20,7 +20,8 @@
     "lint:js:fix": "eslint . --fix",
     "start": "export $(cat .env | xargs) ; ember serve",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
-    "test:ember": "ember test"
+    "pretest": "export $(cat .env | xargs)",
+    "test:ember": "concurrently \"firebase emulators:start --import=./tests/emulators\" \"ember test -s\" --names \"emulators,test\" -c \"bgMagenta.bold,bgBlue.bold\""
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",
