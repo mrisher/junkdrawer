@@ -1,4 +1,6 @@
 'use strict';
+require('dotenv').config();
+// console.log(process.env);    // uncomment to debug config import
 
 module.exports = function (environment) {
   const ENV = {

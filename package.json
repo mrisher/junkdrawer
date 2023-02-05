@@ -18,9 +18,7 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
-    "prestart": "export $(cat .env | xargs)",
     "start": "concurrently \"firebase emulators:start --import=./tests/emulators\" \"ember serve -s\" --names \"emulators,server\" -c \"bgMagenta.bold,bgBlue.bold\"",
-    "pretest": "export $(cat .env | xargs)",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "concurrently \"firebase emulators:start --import=./tests/emulators\" \"ember test -s\" --names \"emulators,test\" -c \"bgMagenta.bold,bgBlue.bold\""
   },
@@ -75,5 +73,9 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "sharp": "^0.31.3"
   }
 }

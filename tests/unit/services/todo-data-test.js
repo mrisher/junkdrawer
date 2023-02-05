@@ -8,5 +8,6 @@ module('Unit | Service | todo-data', function (hooks) {
   test('it exists', function (assert) {
     let service = this.owner.lookup('service:todo-data');
     assert.ok(service);
+    assert.ok(service.DatabasePartition);
   });
 });
