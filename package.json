@@ -18,9 +18,10 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
-    "start": "concurrently \"firebase emulators:start --import=./tests/emulators\" \"ember serve -s\" --names \"emulators,server\" -c \"bgMagenta.bold,bgBlue.bold\"",
+    "start": "ember serve",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
-    "test:ember": "concurrently \"firebase emulators:start --import=./tests/emulators\" \"ember test -s\" --names \"emulators,test\" -c \"bgMagenta.bold,bgBlue.bold\""
+    "test:ember": "firebase emulators:exec --import=./tests/emulators \"ember test -s\"",
+    "oldtest:ember": "concurrently \"firebase emulators:start --import=./tests/emulators\" \"ember test -s\" --names \"emulators,test\" -c \"bgMagenta.bold,bgBlue.bold\""
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",
