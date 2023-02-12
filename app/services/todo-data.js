@@ -2,11 +2,16 @@ import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, connectDatabaseEmulator, ref, set, get, onValue } from 'firebase/database';
+import {
+  getDatabase,
+  connectDatabaseEmulator,
+  ref,
+  set,
+  onValue,
+} from 'firebase/database';
 import {
   getAuth,
   connectAuthEmulator,
-  getRedirectResult,
   signInWithRedirect,
   onAuthStateChanged,
   GoogleAuthProvider,
@@ -52,7 +57,7 @@ class Todo {
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// TODO: Explore firebase functions for hiding secrets: https://www.youtube.com/watch?v=Pk5xgifoLYI 
+// TODO: Explore firebase functions for hiding secrets: https://www.youtube.com/watch?v=Pk5xgifoLYI
 // (firebase:functions:config set)
 const firebaseConfig = {
   apiKey: ENV.FIREBASE_API_KEY,
@@ -73,11 +78,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const database = getDatabase(app);
 if (ENV.environment === 'test') {
-    connectAuthEmulator(auth, "http://localhost:9099");
+  connectAuthEmulator(auth, 'http://localhost:9099');
 
-    // database testing functions https://firebase.google.com/docs/emulator-suite/connect_rtdb
-    // TODO: Clear database for tests
-    connectDatabaseEmulator(database, "localhost", 9000);
+  // database testing functions https://firebase.google.com/docs/emulator-suite/connect_rtdb
+  // TODO: Clear database for tests
+  connectDatabaseEmulator(database, 'localhost', 9000);
 }
 const provider = new GoogleAuthProvider();
 
@@ -102,10 +107,10 @@ export default class TodoDataService extends Service {
     super(...args);
 
     if (ENV.environment === 'test') {
-        this.DatabasePartition = ENV.FIREBASE_DATABASE_PARTITION.replace(
-            '$USERID',
-            '12345'
-          );
+      this.DatabasePartition = ENV.FIREBASE_DATABASE_PARTITION.replace(
+        '$USERID',
+        '12345'
+      );
     }
 
     onAuthStateChanged(auth, (user) => {
@@ -168,8 +173,8 @@ export default class TodoDataService extends Service {
   @action remove(todo) {
     this.todos = this.todos.filter((existing) => {
       return existing !== todo;
-      this.persist();
     });
+    this.persist();
   }
 
   @action

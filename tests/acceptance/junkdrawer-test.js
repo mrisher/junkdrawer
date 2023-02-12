@@ -11,10 +11,6 @@ module('Acceptance | junkdrawer', function (hooks) {
     assert.strictEqual(currentURL(), '/');
     assert.dom('h1').hasText('The Junk Drawer');
 
-    assert.dom('a.ember-view').exists({count: 3});
-    
-    //await click('a.ember-view').hasText('Active');
-
-    //assert.strictEqual(currentURL(), '/active');
+    assert.dom('a.ember-view').exists({ count: 3 });
   });
 });

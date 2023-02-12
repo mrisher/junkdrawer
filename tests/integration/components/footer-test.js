@@ -17,18 +17,12 @@ module('Integration | Component | footer', function (hooks) {
     assert.dom('[data-test-active-link]').hasText('Active');
     assert.dom('[data-test-completed-link]').hasText('Completed');
 
-
-
     // // Template block usage:
     // await render(hbs`
     //   <Footer>
     //     template block text
     //   </Footer>
     // `);
-    //assert.dom(this.element).hasText('template block text');
-    
-    
-
-    
+    // assert.dom(this.element).hasText('template block text');
   });
 });
