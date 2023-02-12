@@ -72,7 +72,7 @@ const app = initializeApp(firebaseConfig);
 // Do Authentication (if necessary)
 const auth = getAuth();
 const database = getDatabase(app);
-if (ENV.environment === 'development' || ENV.environment === 'test') {
+if (ENV.environment === 'test') {
     connectAuthEmulator(auth, "http://localhost:9099");
 
     // database testing functions https://firebase.google.com/docs/emulator-suite/connect_rtdb
@@ -96,9 +96,17 @@ const provider = new GoogleAuthProvider();
 export default class TodoDataService extends Service {
   @tracked todos = [];
   DatabasePartition = '';
+  loaded = false;
 
   constructor(...args) {
     super(...args);
+
+    if (ENV.environment === 'test') {
+        this.DatabasePartition = ENV.FIREBASE_DATABASE_PARTITION.replace(
+            '$USERID',
+            '12345'
+          );
+    }
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -154,6 +162,7 @@ export default class TodoDataService extends Service {
     this.todos.push(newTodo);
     this.todos = this.todos; // self-assignment to trigger Tracked
     this.persist();
+    return newTodo;
   }
 
   @action remove(todo) {
@@ -183,6 +192,7 @@ export default class TodoDataService extends Service {
   @action setType(todo, typeName) {
     todo.itemType = TodoType[typeName];
     this.persist();
+    return TodoType[typeName];
   }
 
   @action persist() {
@@ -196,6 +206,7 @@ export default class TodoDataService extends Service {
 function load(pTodoListComponent, parsedInput) {
   // needs a pointer to the container class so it can set the child "todos" element
   pTodoListComponent.todos = parsedInput || [];
+  pTodoListComponent.loaded = true;
 }
 
 function persist(todos, partition) {
